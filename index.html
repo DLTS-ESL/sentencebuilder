@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sentence Builder | Grammar Game</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ESL Sentence Builder</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
 :root{
   --blue:#269bd5;
@@ -28,13 +31,14 @@ body{
   padding:15px;
 }
 
-header,.card{
+header,
+.card{
   background:white;
   border:2px solid #d5edfb;
   border-radius:22px;
   padding:22px;
   margin-bottom:16px;
-  box-shadow:0 5px 18px #6aaed018;
+  box-shadow:0 5px 18px rgba(106,174,208,.10);
 }
 
 header{
@@ -98,6 +102,11 @@ h1{
   background:var(--blue);
   color:white;
   border-color:var(--blue);
+}
+
+.mode:disabled{
+  opacity:.5;
+  cursor:not-allowed;
 }
 
 h2{
@@ -169,6 +178,7 @@ h2{
   gap:7px;
   flex:0 1 auto;
   font-size:24px;
+  font-family:inherit;
 }
 
 .slot.filled{
@@ -176,27 +186,25 @@ h2{
   border-color:#83c9f0;
   color:var(--dark);
   font-weight:bold;
-}
-
-.slot.filled:not(.correct):not(.wrong){
   cursor:pointer;
 }
 
-.slot.filled:not(.correct):not(.wrong):hover{
-  background:#fff0f0;
-  border-color:#e99a9a;
+.slot.filled:hover{
+  background:#fff4f4;
 }
 
 .slot.correct{
   border-color:#75cda0;
   background:#effcf4;
   color:#176c3d;
+  cursor:default;
 }
 
 .slot.wrong{
   border-color:#efaaaa;
   background:#fff1f1;
   color:#a52e37;
+  cursor:default;
 }
 
 .mark{
@@ -300,13 +308,13 @@ h2{
 }
 
 .speak{
-  background:#eef9ff;
-  border:2px solid #a8dff8;
+  background:#eaf8ff;
+  border:2px solid #8fd3f2;
   color:#1678aa;
 }
 
 .speak:hover{
-  background:#dff4ff;
+  background:#d8f2ff;
 }
 
 .btn:disabled{
@@ -366,7 +374,7 @@ h2{
 .overlay{
   position:fixed;
   inset:0;
-  background:#17415dbb;
+  background:rgba(23,65,93,.73);
   display:none;
   align-items:center;
   justify-content:center;
@@ -403,7 +411,8 @@ h2{
     padding:9px;
   }
 
-  header,.card{
+  header,
+  .card{
     padding:15px;
     border-radius:17px;
   }
@@ -452,7 +461,1557 @@ h2{
 </style>
 </head>
 
+
 <body>
 
-<div cla
+<div class="app">
 
+<header>
+
+  <div class="brand">
+
+    <div class="plant">✏️</div>
+
+    <div>
+      <h1>ESL Sentence Builder</h1>
+      <p class="subtitle">
+        🌱 Put the words in the right order!
+      </p>
+    </div>
+
+  </div>
+
+
+  <div class="top-right">
+
+    <div class="timer" id="timer">
+      ⏱ 05:00
+    </div>
+
+    <button class="mode active" data-mode="easy">
+      ⭐ Easy
+    </button>
+
+    <button class="mode" data-mode="medium">
+      🌿 Medium
+    </button>
+
+    <button class="mode" data-mode="hard">
+      🚀 Hard
+    </button>
+
+  </div>
+
+</header>
+
+
+<section class="card">
+
+  <div class="meta">
+
+    <span class="pill" id="questionLabel">
+      Question 1
+    </span>
+
+    <span class="pill" id="modeLabel">
+      Easy Mode
+    </span>
+
+    <span class="pill" id="levelLabel">
+      Simple sentences
+    </span>
+
+  </div>
+
+
+  <h2>🎯 Build the sentence</h2>
+
+  <p class="instructions" id="instructions"></p>
+
+
+  <div class="answer-area">
+
+    <div class="area-title">
+      📝 Your sentence
+    </div>
+
+    <div
+      class="answer-slots"
+      id="answerSlots">
+    </div>
+
+  </div>
+
+
+  <div class="word-bank">
+
+    <div class="bank-head">
+
+      <h2>🧩 Available words</h2>
+
+      <span class="pill" id="wordCount">
+        0 words left
+      </span>
+
+    </div>
+
+    <div
+      class="tiles"
+      id="wordBank">
+    </div>
+
+  </div>
+
+
+  <div
+    class="feedback"
+    id="feedback"
+    aria-live="polite">
+
+    Ready? Put the words in order!
+
+  </div>
+
+
+  <div class="actions">
+
+    <button
+      class="btn delete"
+      id="deleteBtn">
+      ⌫ Delete Last Word
+    </button>
+
+    <button
+      class="btn secondary"
+      id="clearBtn">
+      ↩ Clear Sentence
+    </button>
+
+    <button
+      class="btn primary"
+      id="submitBtn">
+      ✓ Submit Answer
+    </button>
+
+    <button
+      class="btn speak"
+      id="speakBtn">
+      🔊 Read Sentence
+    </button>
+
+    <button
+      class="btn secondary"
+      id="newBtn">
+      ✨ New Question
+    </button>
+
+  </div>
+
+</section>
+
+
+<section class="card">
+
+  <h2>🏆 Your progress</h2>
+
+  <div class="score-grid">
+
+    <div class="stat">
+      <div class="num" id="score">0</div>
+      <div class="small">
+        Correct Sentences
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="num" id="attempts">0</div>
+      <div class="small">
+        Questions Checked
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="num" id="accuracy">0%</div>
+      <div class="small">
+        Success Rate
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<section class="card rules">
+
+  <strong>💡 How to play</strong>
+
+  <br>
+
+  • Click each word to move it into your sentence.
+
+  <br>
+
+  • Click a selected word to remove it.
+
+  <br>
+
+  • Use Delete Last Word to remove the last word.
+
+  <br>
+
+  • Click 🔊 Read Sentence to hear your sentence.
+
+  <br>
+
+  • Easy and Medium show capital-letter and punctuation clues.
+
+  <br>
+
+  • Hard hides these clues until you submit.
+
+  <br>
+
+  • Green check marks show correctly positioned words.
+
+</section>
+
+
+<footer
+  style="text-align:center;color:#92a9b8;font-size:13px;padding:8px">
+
+  Sentence Builder · Learn grammar one sentence at a time 🌱
+
+</footer>
+
+</div>
+
+
+<div
+  class="overlay"
+  id="timeOverlay">
+
+  <div class="modal">
+
+    <h2>⏰ Time is up!</h2>
+
+    <p id="finalMessage"></p>
+
+    <button
+      class="btn primary"
+      id="playAgainBtn">
+
+      Play Again
+
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   QUESTIONS
+========================================================= */
+
+const QUESTIONS = {
+
+easy:[
+"I went to the park.",
+"The cat is on the bed.",
+"She has a red bag.",
+"We play in the garden.",
+"The dog can run fast.",
+"Tom likes to read books.",
+"My mum cooks nice food.",
+"The bird is in the tree.",
+"I can swim very well.",
+"They walk to school every day.",
+"The baby is sleeping now.",
+"We saw a big fish.",
+"He eats an apple every morning.",
+"The children are playing outside.",
+"My friend gave me a gift.",
+"The little girl has two cats.",
+"Dad is washing the car.",
+"We went home after school.",
+"The boy kicked the ball.",
+"I like to eat fresh fruit."
+],
+
+medium:[
+"Yesterday, we played football after school.",
+"My sister always reads a book before bed.",
+"The little dog chased a butterfly around the garden.",
+"Tom put his shoes beside the front door.",
+"We visited our grandparents during the school holidays.",
+"After lunch, the children went outside to play.",
+"My best friend usually walks to school with me.",
+"The teacher gave everyone a worksheet to complete.",
+"Because it was cold, I wore my warm jacket.",
+"She carefully placed the flowers inside a glass vase.",
+"Our family watched a funny film last night.",
+"The boy was excited about his birthday party.",
+"Before dinner, I helped my father wash the dishes.",
+"My younger brother sometimes forgets to pack his lunch.",
+"The students worked together to finish the class project.",
+"Although it was late, we continued reading the story.",
+"Every morning, my mother prepares breakfast for our family.",
+"The girl dropped her pencil while she was writing.",
+"We could not go swimming because the pool was closed.",
+"After finishing her homework, Anna called her best friend.",
+"The children were happy when their teacher announced the trip.",
+"My father bought some fresh vegetables from the market.",
+"Please remember to turn off the lights before leaving.",
+"The puppy slept peacefully beside its favourite blanket.",
+"During the weekend, we visited a small village near the mountains.",
+"Jack was hungry, so he made himself a cheese sandwich.",
+"The class planted flowers to make the school garden beautiful.",
+"She practises the piano every day because she loves music.",
+"When the rain stopped, the children returned to the playground.",
+"I packed my bag before I went to bed."
+],
+
+hard:[
+"Although it was raining, we continued playing outside.",
+"The students finished their homework before dinner.",
+"My younger sister carefully placed the glass on the table.",
+"After the film ended, everyone walked quietly towards the exit.",
+"The boy who lives next door won the writing competition.",
+"We stayed inside because the weather was extremely windy.",
+"The teacher explained the instructions before the students began.",
+"If you practise every day, your reading will improve.",
+"The little puppy hid under the sofa when it heard thunder.",
+"Yesterday, my family visited a museum near the city centre.",
+"The children were excited because they had planned a surprise.",
+"While Mum prepared lunch, Dad helped me tidy the kitchen.",
+"The book that you lent me was more interesting than expected.",
+"Our class planted several trees to make the playground greener.",
+"Before crossing the road, always look carefully in both directions.",
+"Although she was tired, Maya finished the project on time.",
+"The team celebrated their success after completing the difficult task.",
+"When the bell rang, the students packed their bags quickly.",
+"My grandfather tells wonderful stories about his childhood adventures.",
+"The girl carefully checked her answers before submitting the test.",
+"We will visit the science centre if we finish our work early.",
+"Because the path was slippery, the hikers walked very carefully.",
+"The family decided to leave early to avoid the heavy traffic.",
+"After reading the instructions, Ben assembled the model by himself.",
+"The puppy wagged its tail whenever its owner came home.",
+"Students can learn new vocabulary by reading a variety of books.",
+"The little boy could not find his shoes anywhere in the house.",
+"Even though the task was challenging, everyone tried their best.",
+"The class worked together to create a colourful poster about recycling.",
+"When the rain stopped, we went outside to look for a rainbow."
+]
+
+};
+
+
+/* =========================================================
+   MODE INFORMATION
+========================================================= */
+
+const MODE_INFO = {
+
+easy:{
+  label:"Easy Mode",
+  level:"Simple sentences",
+  instructions:
+    "Look for the capital letter at the beginning and punctuation at the end. Click each word to build your sentence."
+},
+
+medium:{
+  label:"Medium Mode",
+  level:"Longer sentences",
+  instructions:
+    "Build a longer sentence using the capital letter and punctuation clues. Pay attention to word order and joining words."
+},
+
+hard:{
+  label:"Hard Mode",
+  level:"Challenge sentences",
+  instructions:
+    "No clues! All words appear in lowercase without punctuation. Arrange the words, then submit to reveal the correct sentence."
+}
+
+};
+
+
+/* =========================================================
+   GAME VARIABLES
+========================================================= */
+
+let mode="easy";
+
+let questionText="";
+let correctWords=[];
+
+let bank=[];
+let answer=[];
+
+let questionNumber=0;
+let score=0;
+let attempts=0;
+
+let checked=false;
+let gameOver=false;
+
+let timeLeft=300;
+let timerHandle=null;
+
+let usedQuestions={
+  easy:[],
+  medium:[],
+  hard:[]
+};
+
+
+/* =========================================================
+   SHORTCUT
+========================================================= */
+
+function $(id){
+  return document.getElementById(id);
+}
+
+
+/* =========================================================
+   SHUFFLE
+========================================================= */
+
+function shuffle(array){
+
+  const copy=[...array];
+
+  for(
+    let i=copy.length-1;
+    i>0;
+    i--
+  ){
+
+    const j=
+      Math.floor(
+        Math.random()*(i+1)
+      );
+
+    [
+      copy[i],
+      copy[j]
+    ]=[
+      copy[j],
+      copy[i]
+    ];
+
+  }
+
+  return copy;
+}
+
+
+/* =========================================================
+   REMOVE PUNCTUATION
+========================================================= */
+
+function cleanWord(word){
+
+  return word
+    .replace(/[.,!?;:]+$/,"");
+}
+
+
+/* =========================================================
+   DISPLAY WORD
+========================================================= */
+
+function displayWord(item){
+
+  if(mode==="hard"){
+
+    return cleanWord(item.word)
+      .toLowerCase();
+
+  }
+
+  return item.word;
+}
+
+
+/* =========================================================
+   SPEECH
+========================================================= */
+
+function stopSpeech(){
+
+  if(
+    "speechSynthesis" in window
+  ){
+
+    window.speechSynthesis.cancel();
+
+  }
+
+}
+
+
+/*
+ * This function ONLY runs from a button click.
+ * This avoids browser autoplay restrictions.
+ */
+
+function speak(text){
+
+  if(!text){
+    return;
+  }
+
+  if(
+    !("speechSynthesis" in window)
+  ){
+
+    $("feedback").className=
+      "feedback bad";
+
+    $("feedback").textContent=
+      "Reading aloud is not supported by this browser.";
+
+    return;
+
+  }
+
+
+  stopSpeech();
+
+
+  const speech=
+    new SpeechSynthesisUtterance(
+      text
+    );
+
+
+  speech.lang="en-US";
+
+  speech.rate=0.78;
+
+  speech.pitch=1;
+
+  speech.volume=1;
+
+
+  $("speakBtn").textContent=
+    "🔊 Reading...";
+
+
+  speech.onend=function(){
+
+    $("speakBtn").textContent=
+      "🔊 Read Sentence";
+
+  };
+
+
+  speech.onerror=function(){
+
+    $("speakBtn").textContent=
+      "🔊 Read Sentence";
+
+  };
+
+
+  /*
+   * The actual speech call.
+   */
+
+  window.speechSynthesis.speak(
+    speech
+  );
+
+}
+
+
+/* =========================================================
+   READ BUTTON
+========================================================= */
+
+function readSentence(){
+
+  if(gameOver){
+    return;
+  }
+
+
+  let text="";
+
+
+  /*
+   * Once checked, read the
+   * correct sentence.
+   */
+
+  if(checked){
+
+    text=
+      correctWords.join(" ");
+
+  }
+
+  /*
+   * Before checking, read
+   * whatever the student built.
+   */
+
+  else{
+
+    if(answer.length===0){
+
+      $("feedback").className=
+        "feedback bad";
+
+      $("feedback").textContent=
+        "Choose some words first.";
+
+      return;
+
+    }
+
+
+    text=
+      answer
+        .map(item=>cleanWord(item.word))
+        .join(" ");
+
+  }
+
+
+  speak(text);
+
+}
+
+
+/* =========================================================
+   NEW QUESTION
+========================================================= */
+
+function getNewQuestion(){
+
+  if(gameOver){
+    return;
+  }
+
+
+  stopSpeech();
+
+
+  const pool=
+    QUESTIONS[mode];
+
+
+  let available=
+    pool
+      .map(
+        (_,index)=>index
+      )
+      .filter(
+        index=>
+          !usedQuestions[mode]
+            .includes(index)
+      );
+
+
+  if(available.length===0){
+
+    usedQuestions[mode]=[];
+
+    available=
+      pool.map(
+        (_,index)=>index
+      );
+
+  }
+
+
+  const randomIndex=
+    Math.floor(
+      Math.random()*available.length
+    );
+
+
+  const questionIndex=
+    available[randomIndex];
+
+
+  usedQuestions[mode]
+    .push(questionIndex);
+
+
+  questionText=
+    pool[questionIndex];
+
+
+  correctWords=
+    questionText
+      .trim()
+      .split(/\s+/);
+
+
+  bank=
+    shuffle(
+      correctWords.map(
+        (word,index)=>({
+          id:index,
+          word:word
+        })
+      )
+    );
+
+
+  answer=[];
+
+  checked=false;
+
+  questionNumber++;
+
+
+  $("questionLabel").textContent=
+    "Question "+questionNumber;
+
+
+  $("modeLabel").textContent=
+    MODE_INFO[mode].label;
+
+
+  $("levelLabel").textContent=
+    MODE_INFO[mode].level;
+
+
+  $("instructions").textContent=
+    MODE_INFO[mode].instructions;
+
+
+  $("feedback").className=
+    "feedback";
+
+
+  $("feedback").textContent=
+    "Ready? Put the words in order!";
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   CHECK POSITION
+========================================================= */
+
+function positionCorrect(index){
+
+  if(!answer[index]){
+    return false;
+  }
+
+
+  return(
+    cleanWord(
+      answer[index].word
+    ).toLowerCase()
+    ===
+    cleanWord(
+      correctWords[index]
+    ).toLowerCase()
+  );
+
+}
+
+
+/* =========================================================
+   RENDER ANSWER
+========================================================= */
+
+function render(){
+
+  $("answerSlots").innerHTML="";
+
+
+  for(
+    let i=0;
+    i<correctWords.length;
+    i++
+  ){
+
+    const slot=
+      document.createElement("button");
+
+
+    slot.type="button";
+
+    slot.className="slot";
+
+
+    if(answer[i]){
+
+      slot.classList.add(
+        "filled"
+      );
+
+
+      if(checked){
+
+        if(positionCorrect(i)){
+
+          slot.classList.add(
+            "correct"
+          );
+
+        }else{
+
+          slot.classList.add(
+            "wrong"
+          );
+
+        }
+
+      }
+
+
+      const word=
+        document.createElement("span");
+
+
+      /*
+       * Hard mode:
+       * show lowercase before submit.
+       * Show original word after submit.
+       */
+
+      if(
+        mode==="hard" &&
+        checked
+      ){
+
+        word.textContent=
+          correctWords[i];
+
+      }else{
+
+        word.textContent=
+          displayWord(answer[i]);
+
+      }
+
+
+      slot.appendChild(word);
+
+
+      if(
+        checked &&
+        positionCorrect(i)
+      ){
+
+        const mark=
+          document.createElement("span");
+
+
+        mark.className="mark";
+
+        mark.textContent="✓";
+
+
+        slot.appendChild(mark);
+
+      }
+
+
+      if(
+        !checked &&
+        !gameOver
+      ){
+
+        slot.onclick=function(){
+
+          removeWord(i);
+
+        };
+
+      }
+
+    }else{
+
+      slot.textContent=
+        i+1;
+
+      slot.style.cursor=
+        "default";
+
+    }
+
+
+    $("answerSlots")
+      .appendChild(slot);
+
+  }
+
+
+  /*
+   * WORD BANK
+   */
+
+  $("wordBank").innerHTML="";
+
+
+  bank.forEach(function(item){
+
+    const button=
+      document.createElement("button");
+
+
+    button.type="button";
+
+    button.className="tile";
+
+
+    button.textContent=
+      displayWord(item);
+
+
+    button.disabled=
+      checked ||
+      gameOver;
+
+
+    button.onclick=function(){
+
+      selectWord(item.id);
+
+    };
+
+
+    $("wordBank")
+      .appendChild(button);
+
+  });
+
+
+  $("wordCount").textContent=
+    bank.length+" words left";
+
+
+  $("clearBtn").disabled=
+    checked ||
+    gameOver ||
+    answer.length===0;
+
+
+  $("deleteBtn").disabled=
+    checked ||
+    gameOver ||
+    answer.length===0;
+
+
+  $("submitBtn").disabled=
+    checked ||
+    gameOver;
+
+
+  $("newBtn").disabled=
+    gameOver;
+
+
+  /*
+   * Read button is available
+   * whenever there is something
+   * to read.
+   */
+
+  $("speakBtn").disabled=
+    gameOver ||
+    (
+      !checked &&
+      answer.length===0
+    );
+
+
+  document
+    .querySelectorAll(".mode")
+    .forEach(function(button){
+
+      button.disabled=
+        gameOver;
+
+    });
+
+}
+
+
+/* =========================================================
+   SELECT WORD
+========================================================= */
+
+function selectWord(id){
+
+  if(
+    checked ||
+    gameOver
+  ){
+    return;
+  }
+
+
+  const index=
+    bank.findIndex(
+      item=>item.id===id
+    );
+
+
+  if(index===-1){
+    return;
+  }
+
+
+  const selected=
+    bank.splice(
+      index,
+      1
+    )[0];
+
+
+  answer.push(selected);
+
+
+  $("feedback").className=
+    "feedback";
+
+
+  $("feedback").textContent="";
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   REMOVE SELECTED WORD
+========================================================= */
+
+function removeWord(index){
+
+  if(
+    checked ||
+    gameOver
+  ){
+    return;
+  }
+
+
+  const removed=
+    answer.splice(
+      index,
+      1
+    )[0];
+
+
+  if(removed){
+
+    bank.push(removed);
+
+  }
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   DELETE LAST
+========================================================= */
+
+function deleteLastWord(){
+
+  if(
+    checked ||
+    gameOver ||
+    answer.length===0
+  ){
+    return;
+  }
+
+
+  const removed=
+    answer.pop();
+
+
+  bank.push(removed);
+
+
+  $("feedback").className=
+    "feedback";
+
+
+  $("feedback").textContent=
+    "Last word removed.";
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+function clearSentence(){
+
+  if(
+    checked ||
+    gameOver
+  ){
+    return;
+  }
+
+
+  bank.push(...answer);
+
+  answer=[];
+
+
+  $("feedback").className=
+    "feedback";
+
+
+  $("feedback").textContent=
+    "Sentence cleared. Try again!";
+
+
+  render();
+
+}
+
+
+/* =========================================================
+   SUBMIT
+========================================================= */
+
+function checkSentence(){
+
+  if(
+    gameOver ||
+    checked
+  ){
+    return;
+  }
+
+
+  if(
+    answer.length !==
+    correctWords.length
+  ){
+
+    $("feedback").className=
+      "feedback bad";
+
+
+    $("feedback").textContent=
+      "Please use all the words before submitting!";
+
+
+    return;
+
+  }
+
+
+  attempts++;
+
+  checked=true;
+
+
+  const correct=
+    answer.every(
+      function(item,index){
+
+        return positionCorrect(
+          index
+        );
+
+      }
+    );
+
+
+  if(correct){
+
+    score++;
+
+  }
+
+
+  render();
+
+  updateStats();
+
+
+  if(correct){
+
+    $("feedback").className=
+      "feedback good";
+
+
+    $("feedback").textContent=
+      "🎉 Excellent! Every word is in the correct position!";
+
+  }else{
+
+    $("feedback").className=
+      "feedback bad";
+
+
+    $("feedback").textContent=
+      "Keep practising! Green checks show correctly positioned words.";
+
+  }
+
+
+  /*
+   * IMPORTANT:
+   *
+   * Do NOT automatically call speech here.
+   * Browsers may block it because the speech
+   * happens after a JavaScript event delay.
+   *
+   * The student can now press:
+   *
+   * 🔊 Read Sentence
+   */
+
+}
+
+
+/* =========================================================
+   UPDATE SCORE
+========================================================= */
+
+function updateStats(){
+
+  $("score").textContent=
+    score;
+
+
+  $("attempts").textContent=
+    attempts;
+
+
+  if(attempts===0){
+
+    $("accuracy").textContent=
+      "0%";
+
+  }else{
+
+    $("accuracy").textContent=
+      Math.round(
+        score/attempts*100
+      )+"%";
+
+  }
+
+}
+
+
+/* =========================================================
+   CHANGE MODE
+========================================================= */
+
+function setMode(newMode){
+
+  if(gameOver){
+    return;
+  }
+
+
+  stopSpeech();
+
+
+  mode=newMode;
+
+
+  document
+    .querySelectorAll(".mode")
+    .forEach(function(button){
+
+      button.classList.toggle(
+        "active",
+        button.dataset.mode===mode
+      );
+
+    });
+
+
+  getNewQuestion();
+
+}
+
+
+/* =========================================================
+   TIMER
+========================================================= */
+
+function updateTimer(){
+
+  const minutes=
+    Math.floor(
+      timeLeft/60
+    );
+
+
+  const seconds=
+    timeLeft%60;
+
+
+  $("timer").textContent=
+    "⏱ "+
+    String(minutes)
+      .padStart(2,"0")
+    +
+    ":"+
+    String(seconds)
+      .padStart(2,"0");
+
+
+  if(timeLeft<=60){
+
+    $("timer").style.color=
+      "#c43f48";
+
+  }else{
+
+    $("timer").style.color=
+      "#205b91";
+
+  }
+
+}
+
+
+/* =========================================================
+   START TIMER
+========================================================= */
+
+function startTimer(){
+
+  clearInterval(
+    timerHandle
+  );
+
+
+  timerHandle=
+    setInterval(function(){
+
+      if(gameOver){
+        return;
+      }
+
+
+      timeLeft--;
+
+
+      updateTimer();
+
+
+      if(timeLeft<=0){
+
+        endGame();
+
+      }
+
+    },1000);
+
+}
+
+
+/* =========================================================
+   END GAME
+========================================================= */
+
+function endGame(){
+
+  gameOver=true;
+
+
+  clearInterval(
+    timerHandle
+  );
+
+
+  stopSpeech();
+
+
+  render();
+
+
+  const percentage=
+    attempts
+      ?Math.round(
+        score/attempts*100
+      )
+      :0;
+
+
+  $("finalMessage").textContent=
+    "You got "+
+    score+
+    " out of "+
+    attempts+
+    " checked sentences correct ("+
+    percentage+
+    "%). Great effort!";
+
+
+  $("timeOverlay")
+    .classList.add(
+      "show"
+    );
+
+}
+
+
+/* =========================================================
+   START / RESET GAME
+========================================================= */
+
+function startGame(){
+
+  clearInterval(
+    timerHandle
+  );
+
+
+  stopSpeech();
+
+
+  mode="easy";
+
+  questionNumber=0;
+
+  score=0;
+
+  attempts=0;
+
+  timeLeft=300;
+
+  gameOver=false;
+
+
+  usedQuestions={
+    easy:[],
+    medium:[],
+    hard:[]
+  };
+
+
+  document
+    .querySelectorAll(".mode")
+    .forEach(function(button){
+
+      button.classList.toggle(
+        "active",
+        button.dataset.mode==="easy"
+      );
+
+    });
+
+
+  $("timeOverlay")
+    .classList.remove(
+      "show"
+    );
+
+
+  updateStats();
+
+  updateTimer();
+
+  getNewQuestion();
+
+  startTimer();
+
+}
+
+
+/* =========================================================
+   BUTTONS
+========================================================= */
+
+document
+  .querySelectorAll(".mode")
+  .forEach(function(button){
+
+    button.addEventListener(
+      "click",
+      function(){
+
+        setMode(
+          button.dataset.mode
+        );
+
+      }
+    );
+
+  });
+
+
+$("submitBtn")
+  .addEventListener(
+    "click",
+    checkSentence
+  );
+
+
+$("clearBtn")
+  .addEventListener(
+    "click",
+    clearSentence
+  );
+
+
+$("deleteBtn")
+  .addEventListener(
+    "click",
+    deleteLastWord
+  );
+
+
+$("newBtn")
+  .addEventListener(
+    "click",
+    getNewQuestion
+  );
+
+
+$("speakBtn")
+  .addEventListener(
+    "click",
+    readSentence
+  );
+
+
+$("playAgainBtn")
+  .addEventListener(
+    "click",
+    startGame
+  );
+
+
+/* =========================================================
+   START
+========================================================= */
+
+startGame();
+
+</script>
+
+</body>
+</html>
