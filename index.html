@@ -1,529 +1,459 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Sentence Builder | Grammar Game</title>
+
 <style>
 *{box-sizing:border-box}
-:root{--blue:#269bd5;--dark:#205b91;--green:#219653;--red:#d9444e}
-body{margin:0;background:linear-gradient(135deg,#dff5ff,#f5fbff);font-family:"Trebuchet MS",Arial,sans-serif;color:#29475c}
-.app{max-width:1100px;margin:auto;padding:15px}
-header,.card{background:white;border:2px solid #d5edfb;border-radius:22px;padding:22px;margin-bottom:16px;box-shadow:0 5px 18px #6aaed018}
-header{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
-.brand{display:flex;align-items:center;gap:13px}
-.plant{font-size:48px}
-h1{font-size:clamp(26px,4vw,36px);margin:0;color:var(--dark)}
-.subtitle{margin:5px 0 0;color:#7191a5;font-size:16px}
-.top-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.timer{font-size:24px;font-weight:bold;background:#e8f7ff;padding:13px 15px;border-radius:15px;color:var(--dark)}
-.mode{padding:13px 16px;border:2px solid #cce7f7;border-radius:14px;background:white;color:var(--dark);font-weight:bold;font-size:16px;cursor:pointer}
-.mode.active{background:var(--blue);color:white;border-color:var(--blue)}
-h2{color:#3685b3;margin:0 0 12px;font-size:25px}
-.instructions{color:#6a899f;line-height:1.6;font-size:17px;margin:0}
-.meta{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:17px}
-.pill{background:#e8f6ff;color:#287ba8;padding:8px 13px;border-radius:20px;font-size:15px;font-weight:bold}
-.answer-area{background:#f0faff;border:2px solid #d4efff;border-radius:18px;padding:18px;margin-top:20px}
-.area-title{font-weight:bold;color:#258bc4;margin-bottom:14px;font-size:20px}
-.answer-slots{display:flex;flex-wrap:wrap;gap:11px;min-height:78px;align-items:center}
-.slot{min-height:67px;min-width:85px;padding:10px 13px;border:2px dashed #b9d6ee;border-radius:14px;background:white;color:#a1b9cd;text-align:center;display:flex;align-items:center;justify-content:center;gap:7px;flex:0 1 auto;font-size:24px}
-.slot.filled{border-style:solid;border-color:#83c9f0;color:var(--dark);font-weight:bold}
-.slot.filled:not(.correct):not(.wrong){cursor:pointer}
-.slot.filled:not(.correct):not(.wrong):hover{background:#fff0f0;border-color:#e99a9a}
-.slot.correct{border-color:#75cda0;background:#effcf4;color:#176c3d}
-.slot.wrong{border-color:#efaaaa;background:#fff1f1;color:#a52e37}
-.mark{color:var(--green);font-size:24px;font-weight:bold}
-.word-bank{background:#fff9e9;border:2px solid #ffe8a6;border-radius:18px;padding:18px;margin-top:17px}
-.bank-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.bank-head h2{margin:0;font-size:22px}
-.tiles{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.tile{background:white;border:2px solid #8ed5fa;border-radius:15px;padding:17px 22px;font-size:25px;font-weight:bold;color:#205b91;cursor:pointer;box-shadow:0 4px 0 #d2eaf6;transition:transform .12s;font-family:inherit}
-.tile:hover{transform:translateY(-2px);background:#f2fbff}
-.tile:disabled{opacity:.4;cursor:default;transform:none}
-.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:12px;margin:23px 0 3px}
-.btn{border:0;border-radius:14px;padding:15px 23px;font-size:18px;font-weight:bold;cursor:pointer;font-family:inherit}
-.primary{background:var(--blue);color:white;box-shadow:0 4px 0 #b8e4fa}
-.primary:hover{background:#1687c0}
-.secondary{background:white;border:2px solid #cce7f7;color:var(--dark)}
-.delete{background:#fff0f0;border:2px solid #f3caca;color:#bd3540}
-.btn:disabled{opacity:.4;cursor:default}
-.feedback{text-align:center;font-weight:bold;font-size:19px;min-height:30px;margin:15px 0;color:#3685b3;line-height:1.5}
-.feedback.good{color:#16854a}
-.feedback.bad{color:#c43f48}
-.score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.stat{background:#f1f9ff;border-radius:13px;text-align:center;padding:14px 5px}
-.num{font-size:30px;font-weight:bold;color:#358dc0}
-.small{font-size:14px;color:#7893a5;margin-top:4px}
-.rules{color:#648399;line-height:1.9;font-size:16px}
-.overlay{position:fixed;inset:0;background:#17415dbb;display:none;align-items:center;justify-content:center;padding:20px;z-index:5}
-.overlay.show{display:flex}
-.modal{background:white;padding:30px;border-radius:22px;max-width:450px;width:100%;text-align:center}
-.modal h2{font-size:30px}
-.modal p{line-height:1.7;color:#66859a;font-size:18px}
+
+:root{
+  --blue:#269bd5;
+  --dark:#205b91;
+  --green:#219653;
+  --red:#d9444e;
+}
+
+body{
+  margin:0;
+  background:linear-gradient(135deg,#dff5ff,#f5fbff);
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  color:#29475c;
+}
+
+.app{
+  max-width:1100px;
+  margin:auto;
+  padding:15px;
+}
+
+header,.card{
+  background:white;
+  border:2px solid #d5edfb;
+  border-radius:22px;
+  padding:22px;
+  margin-bottom:16px;
+  box-shadow:0 5px 18px #6aaed018;
+}
+
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  flex-wrap:wrap;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.plant{
+  font-size:48px;
+}
+
+h1{
+  font-size:clamp(26px,4vw,36px);
+  margin:0;
+  color:var(--dark);
+}
+
+.subtitle{
+  margin:5px 0 0;
+  color:#7191a5;
+  font-size:16px;
+}
+
+.top-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.timer{
+  font-size:24px;
+  font-weight:bold;
+  background:#e8f7ff;
+  padding:13px 15px;
+  border-radius:15px;
+  color:var(--dark);
+}
+
+.mode{
+  padding:13px 16px;
+  border:2px solid #cce7f7;
+  border-radius:14px;
+  background:white;
+  color:var(--dark);
+  font-weight:bold;
+  font-size:16px;
+  cursor:pointer;
+}
+
+.mode.active{
+  background:var(--blue);
+  color:white;
+  border-color:var(--blue);
+}
+
+h2{
+  color:#3685b3;
+  margin:0 0 12px;
+  font-size:25px;
+}
+
+.instructions{
+  color:#6a899f;
+  line-height:1.6;
+  font-size:17px;
+  margin:0;
+}
+
+.meta{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:17px;
+}
+
+.pill{
+  background:#e8f6ff;
+  color:#287ba8;
+  padding:8px 13px;
+  border-radius:20px;
+  font-size:15px;
+  font-weight:bold;
+}
+
+.answer-area{
+  background:#f0faff;
+  border:2px solid #d4efff;
+  border-radius:18px;
+  padding:18px;
+  margin-top:20px;
+}
+
+.area-title{
+  font-weight:bold;
+  color:#258bc4;
+  margin-bottom:14px;
+  font-size:20px;
+}
+
+.answer-slots{
+  display:flex;
+  flex-wrap:wrap;
+  gap:11px;
+  min-height:78px;
+  align-items:center;
+}
+
+.slot{
+  min-height:67px;
+  min-width:85px;
+  padding:10px 13px;
+  border:2px dashed #b9d6ee;
+  border-radius:14px;
+  background:white;
+  color:#a1b9cd;
+  text-align:center;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  flex:0 1 auto;
+  font-size:24px;
+}
+
+.slot.filled{
+  border-style:solid;
+  border-color:#83c9f0;
+  color:var(--dark);
+  font-weight:bold;
+}
+
+.slot.filled:not(.correct):not(.wrong){
+  cursor:pointer;
+}
+
+.slot.filled:not(.correct):not(.wrong):hover{
+  background:#fff0f0;
+  border-color:#e99a9a;
+}
+
+.slot.correct{
+  border-color:#75cda0;
+  background:#effcf4;
+  color:#176c3d;
+}
+
+.slot.wrong{
+  border-color:#efaaaa;
+  background:#fff1f1;
+  color:#a52e37;
+}
+
+.mark{
+  color:var(--green);
+  font-size:24px;
+  font-weight:bold;
+}
+
+.word-bank{
+  background:#fff9e9;
+  border:2px solid #ffe8a6;
+  border-radius:18px;
+  padding:18px;
+  margin-top:17px;
+}
+
+.bank-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
+}
+
+.bank-head h2{
+  margin:0;
+  font-size:22px;
+}
+
+.tiles{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+}
+
+.tile{
+  background:white;
+  border:2px solid #8ed5fa;
+  border-radius:15px;
+  padding:17px 22px;
+  font-size:25px;
+  font-weight:bold;
+  color:#205b91;
+  cursor:pointer;
+  box-shadow:0 4px 0 #d2eaf6;
+  transition:transform .12s;
+  font-family:inherit;
+}
+
+.tile:hover{
+  transform:translateY(-2px);
+  background:#f2fbff;
+}
+
+.tile:disabled{
+  opacity:.4;
+  cursor:default;
+  transform:none;
+}
+
+.actions{
+  display:flex;
+  justify-content:center;
+  flex-wrap:wrap;
+  gap:12px;
+  margin:23px 0 3px;
+}
+
+.btn{
+  border:0;
+  border-radius:14px;
+  padding:15px 23px;
+  font-size:18px;
+  font-weight:bold;
+  cursor:pointer;
+  font-family:inherit;
+}
+
+.primary{
+  background:var(--blue);
+  color:white;
+  box-shadow:0 4px 0 #b8e4fa;
+}
+
+.primary:hover{
+  background:#1687c0;
+}
+
+.secondary{
+  background:white;
+  border:2px solid #cce7f7;
+  color:var(--dark);
+}
+
+.delete{
+  background:#fff0f0;
+  border:2px solid #f3caca;
+  color:#bd3540;
+}
+
+.speak{
+  background:#eef9ff;
+  border:2px solid #a8dff8;
+  color:#1678aa;
+}
+
+.speak:hover{
+  background:#dff4ff;
+}
+
+.btn:disabled{
+  opacity:.4;
+  cursor:default;
+}
+
+.feedback{
+  text-align:center;
+  font-weight:bold;
+  font-size:19px;
+  min-height:30px;
+  margin:15px 0;
+  color:#3685b3;
+  line-height:1.5;
+}
+
+.feedback.good{
+  color:#16854a;
+}
+
+.feedback.bad{
+  color:#c43f48;
+}
+
+.score-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+
+.stat{
+  background:#f1f9ff;
+  border-radius:13px;
+  text-align:center;
+  padding:14px 5px;
+}
+
+.num{
+  font-size:30px;
+  font-weight:bold;
+  color:#358dc0;
+}
+
+.small{
+  font-size:14px;
+  color:#7893a5;
+  margin-top:4px;
+}
+
+.rules{
+  color:#648399;
+  line-height:1.9;
+  font-size:16px;
+}
+
+.overlay{
+  position:fixed;
+  inset:0;
+  background:#17415dbb;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:5;
+}
+
+.overlay.show{
+  display:flex;
+}
+
+.modal{
+  background:white;
+  padding:30px;
+  border-radius:22px;
+  max-width:450px;
+  width:100%;
+  text-align:center;
+}
+
+.modal h2{
+  font-size:30px;
+}
+
+.modal p{
+  line-height:1.7;
+  color:#66859a;
+  font-size:18px;
+}
+
 @media(max-width:600px){
- .app{padding:9px}
- header,.card{padding:15px;border-radius:17px}
- .top-right{width:100%;gap:6px}
- .timer{font-size:20px;padding:12px}
- .mode{flex:1;padding:11px 4px;font-size:14px}
- .slot{min-width:calc(50% - 6px);min-height:60px;font-size:22px;padding:8px 5px}
- .tile{font-size:23px;padding:15px 17px}
- .btn{font-size:16px;padding:13px 15px}
- .num{font-size:25px}
- .small{font-size:12px}
+
+  .app{
+    padding:9px;
+  }
+
+  header,.card{
+    padding:15px;
+    border-radius:17px;
+  }
+
+  .top-right{
+    width:100%;
+    gap:6px;
+  }
+
+  .timer{
+    font-size:20px;
+    padding:12px;
+  }
+
+  .mode{
+    flex:1;
+    padding:11px 4px;
+    font-size:14px;
+  }
+
+  .slot{
+    min-width:calc(50% - 6px);
+    min-height:60px;
+    font-size:22px;
+    padding:8px 5px;
+  }
+
+  .tile{
+    font-size:23px;
+    padding:15px 17px;
+  }
+
+  .btn{
+    font-size:16px;
+    padding:13px 15px;
+  }
+
+  .num{
+    font-size:25px;
+  }
+
+  .small{
+    font-size:12px;
+  }
 }
 </style>
 </head>
+
 <body>
-<div class="app">
-<header>
- <div class="brand">
-  <div class="plant">✏️</div>
-  <div><h1>ESL Sentence Builder</h1><p class="subtitle">🌱 Put the words in the right order!</p></div>
- </div>
- <div class="top-right">
-  <div class="timer" id="timer">⏱ 05:00</div>
-  <button class="mode active" data-mode="easy">⭐ Easy</button>
-  <button class="mode" data-mode="medium">🌿 Medium</button>
-  <button class="mode" data-mode="hard">🚀 Hard</button>
- </div>
-</header>
 
-<section class="card">
- <div class="meta">
-  <span class="pill" id="questionLabel">Question 1</span>
-  <span class="pill" id="modeLabel">Easy Mode</span>
-  <span class="pill" id="levelLabel">Sentence Order</span>
- </div>
- <h2>🎯 Build the sentence</h2>
- <p class="instructions" id="instructions"></p>
-
- <div class="answer-area">
-  <div class="area-title">📝 Your sentence</div>
-  <div class="answer-slots" id="answerSlots"></div>
- </div>
-
- <div class="word-bank">
-  <div class="bank-head">
-   <h2>🧩 Available words</h2>
-   <span class="pill" id="wordCount">0 words left</span>
-  </div>
-  <div class="tiles" id="wordBank"></div>
- </div>
-
- <div class="feedback" id="feedback" aria-live="polite">Ready? Put the words in order!</div>
- <div class="actions">
-  <button class="btn delete" id="deleteBtn">⌫ Delete Last Word</button>
-  <button class="btn secondary" id="clearBtn">↩ Clear Sentence</button>
-  <button class="btn primary" id="submitBtn">✓ Submit Answer</button>
-  <button class="btn secondary" id="newBtn">✨ New Question</button>
- </div>
-</section>
-
-<section class="card">
- <h2>🏆 Your progress</h2>
- <div class="score-grid">
-  <div class="stat"><div class="num" id="score">0</div><div class="small">Correct Sentences</div></div>
-  <div class="stat"><div class="num" id="attempts">0</div><div class="small">Questions Checked</div></div>
-  <div class="stat"><div class="num" id="accuracy">0%</div><div class="small">Success Rate</div></div>
- </div>
-</section>
-
-<section class="card rules">
- <strong>💡 How to play</strong><br>
- • Click each word to move it into your sentence.<br>
- • Click a selected word to remove it, or use Delete Last Word.<br>
- • Easy and Medium show capital-letter and punctuation clues.<br>
- • Hard hides these clues until you submit.<br>
- • Green check marks show words in the correct position.
-</section>
-<footer style="text-align:center;color:#92a9b8;font-size:13px;padding:8px">Sentence Builder · Learn grammar one sentence at a time 🌱</footer>
-</div>
-
-<div class="overlay" id="timeOverlay">
- <div class="modal">
-  <h2>⏰ Time is up!</h2>
-  <p id="finalMessage"></p>
-  <button class="btn primary" id="playAgainBtn">Play Again</button>
- </div>
-</div>
-
-<script>
-const QUESTIONS = {
-easy:[
-"I went to the park.",
-"The cat is on the bed.",
-"She has a red bag.",
-"We play in the garden.",
-"The dog can run fast.",
-"Tom likes to read books.",
-"My mum cooks nice food.",
-"The bird is in the tree.",
-"I can swim very well.",
-"They walk to school every day.",
-"The baby is sleeping now.",
-"We saw a big fish.",
-"He eats an apple every morning.",
-"The children are playing outside.",
-"My friend gave me a gift.",
-"The little girl has two cats.",
-"Dad is washing the car.",
-"We went home after school.",
-"The boy kicked the ball.",
-"I like to eat fresh fruit."
-],
-
-medium:[
-"Yesterday, we played football after school.",
-"My sister always reads a book before bed.",
-"The little dog chased a butterfly around the garden.",
-"Tom put his shoes beside the front door.",
-"We visited our grandparents during the school holidays.",
-"After lunch, the children went outside to play.",
-"My best friend usually walks to school with me.",
-"The teacher gave everyone a worksheet to complete.",
-"Because it was cold, I wore my warm jacket.",
-"She carefully placed the flowers inside a glass vase.",
-"Our family watched a funny film last night.",
-"The boy was excited about his birthday party.",
-"Before dinner, I helped my father wash the dishes.",
-"My younger brother sometimes forgets to pack his lunch.",
-"The students worked together to finish the class project.",
-"Although it was late, we continued reading the story.",
-"Every morning, my mother prepares breakfast for our family.",
-"The girl dropped her pencil while she was writing.",
-"We could not go swimming because the pool was closed.",
-"After finishing her homework, Anna called her best friend.",
-"The children were happy when their teacher announced the trip.",
-"My father bought some fresh vegetables from the market.",
-"Please remember to turn off the lights before leaving.",
-"The puppy slept peacefully beside its favourite blanket.",
-"During the weekend, we visited a small village near the mountains.",
-"Jack was hungry, so he made himself a cheese sandwich.",
-"The class planted flowers to make the school garden beautiful.",
-"She practises the piano every day because she loves music.",
-"When the rain stopped, the children returned to the playground.",
-"I packed my bag before I went to bed."
-],
-
-hard:[
-"Although it was raining, we continued playing outside.",
-"The students finished their homework before dinner.",
-"My younger sister carefully placed the glass on the table.",
-"After the film ended, everyone walked quietly towards the exit.",
-"The boy who lives next door won the writing competition.",
-"We stayed inside because the weather was extremely windy.",
-"The teacher explained the instructions before the students began.",
-"If you practise every day, your reading will improve.",
-"The little puppy hid under the sofa when it heard thunder.",
-"Yesterday, my family visited a museum near the city centre.",
-"The children were excited because they had planned a surprise.",
-"While Mum prepared lunch, Dad helped me tidy the kitchen.",
-"The book that you lent me was more interesting than expected.",
-"Our class planted several trees to make the playground greener.",
-"Before crossing the road, always look carefully in both directions.",
-"Although she was tired, Maya finished the project on time.",
-"The team celebrated their success after completing the difficult task.",
-"When the bell rang, the students packed their bags quickly.",
-"My grandfather tells wonderful stories about his childhood adventures.",
-"The girl carefully checked her answers before submitting the test.",
-"We will visit the science centre if we finish our work early.",
-"Because the path was slippery, the hikers walked very carefully.",
-"The family decided to leave early to avoid the heavy traffic.",
-"After reading the instructions, Ben assembled the model by himself.",
-"The puppy wagged its tail whenever its owner came home.",
-"Students can learn new vocabulary by reading a variety of books.",
-"The little boy could not find his shoes anywhere in the house.",
-"Even though the task was challenging, everyone tried their best.",
-"The class worked together to create a colourful poster about recycling.",
-"When the rain stopped, we went outside to look for a rainbow."
-]
-};
-
-const MODE_INFO={
-easy:{
-label:"Easy Mode",
-level:"Simple sentences",
-instructions:"Look for the capital letter at the beginning and the punctuation at the end. Click each word to build your sentence."
-},
-medium:{
-label:"Medium Mode",
-level:"Longer sentences",
-instructions:"Build a longer sentence using clues from the capital letter and punctuation. Pay attention to word order, time words, and joining words."
-},
-hard:{
-label:"Hard Mode",
-level:"Challenge sentences",
-instructions:"No clues! All words appear in lowercase without punctuation. Arrange the words, then submit to reveal the correct sentence."
-}
-};
-
-let mode="easy",questionText="",correctWords=[],bank=[],answer=[];
-let questionNumber=0,score=0,attempts=0,checked=false;
-let timeLeft=300,timerHandle=null,gameOver=false;
-let usedQuestions={easy:[],medium:[],hard:[]};
-
-const $=id=>document.getElementById(id);
-
-function shuffle(array){
- const a=[...array];
- for(let i=a.length-1;i>0;i--){
-  const j=Math.floor(Math.random()*(i+1));
-  [a[i],a[j]]=[a[j],a[i]];
- }
- return a;
-}
-
-function cleanWord(word){
- return word.replace(/[.,!?;:]+$/,"");
-}
-
-function visibleWord(item,position){
- if(mode==="hard")return cleanWord(item.word).toLowerCase();
- return item.word;
-}
-
-function getNewQuestion(){
- if(gameOver)return;
-
- const pool=QUESTIONS[mode];
- let available=pool.map((_,i)=>i).filter(i=>!usedQuestions[mode].includes(i));
-
- if(!available.length){
-  usedQuestions[mode]=[];
-  available=pool.map((_,i)=>i);
- }
-
- const pick=available[Math.floor(Math.random()*available.length)];
- usedQuestions[mode].push(pick);
-
- questionText=pool[pick];
- correctWords=questionText.trim().split(/\s+/);
- bank=shuffle(correctWords.map((word,id)=>({id,word})));
- answer=[];
- checked=false;
- questionNumber++;
-
- $("questionLabel").textContent="Question "+questionNumber;
- $("modeLabel").textContent=MODE_INFO[mode].label;
- $("levelLabel").textContent=MODE_INFO[mode].level;
- $("instructions").textContent=MODE_INFO[mode].instructions;
- $("feedback").className="feedback";
- $("feedback").textContent="Ready? Put the words in order!";
-
- render();
-}
-
-function positionCorrect(i){
- if(!answer[i])return false;
- return cleanWord(answer[i].word).toLowerCase()===cleanWord(correctWords[i]).toLowerCase();
-}
-
-function render(){
- $("answerSlots").innerHTML="";
-
- for(let i=0;i<correctWords.length;i++){
-  const slot=document.createElement("button");
-  slot.type="button";
-  slot.className="slot";
-  slot.setAttribute("aria-label","Sentence position "+(i+1));
-
-  if(answer[i]){
-   slot.classList.add("filled");
-
-   if(checked){
-    slot.classList.add(positionCorrect(i)?"correct":"wrong");
-   }
-
-   const word=document.createElement("span");
-
-   // In Hard Mode, reveal the correctly capitalised and punctuated
-   // sentence only after submission.
-   word.textContent=checked&&mode==="hard"
-    ?correctWords[i]
-    :visibleWord(answer[i],i);
-
-   slot.appendChild(word);
-
-   if(checked&&positionCorrect(i)){
-    const mark=document.createElement("span");
-    mark.className="mark";
-    mark.textContent="✓";
-    slot.appendChild(mark);
-   }
-
-   if(!checked&&!gameOver){
-    slot.title="Click to remove this word";
-    slot.onclick=()=>removeWord(i);
-   }
-  }else{
-   slot.textContent=i+1;
-   slot.style.cursor="default";
-  }
-
-  $("answerSlots").appendChild(slot);
- }
-
- $("wordBank").innerHTML="";
-
- bank.forEach(item=>{
-  const btn=document.createElement("button");
-  btn.type="button";
-  btn.className="tile";
-  btn.textContent=mode==="hard"
-   ?cleanWord(item.word).toLowerCase()
-   :item.word;
-  btn.disabled=checked||gameOver;
-  btn.onclick=()=>selectWord(item.id);
-  $("wordBank").appendChild(btn);
- });
-
- $("wordCount").textContent=bank.length+" words left";
- $("clearBtn").disabled=checked||answer.length===0||gameOver;
- $("deleteBtn").disabled=checked||answer.length===0||gameOver;
- $("newBtn").disabled=gameOver;
- $("submitBtn").disabled=checked||gameOver;
- document.querySelectorAll(".mode").forEach(b=>b.disabled=gameOver);
-}
-
-function selectWord(id){
- if(checked||gameOver)return;
- const pos=bank.findIndex(item=>item.id===id);
- if(pos<0)return;
- answer.push(bank.splice(pos,1)[0]);
- $("feedback").textContent="";
- $("feedback").className="feedback";
- render();
-}
-
-function removeWord(position){
- if(checked||gameOver)return;
- bank.push(answer.splice(position,1)[0]);
- render();
-}
-
-function deleteLastWord(){
- if(checked||gameOver||!answer.length)return;
- bank.push(answer.pop());
- $("feedback").className="feedback";
- $("feedback").textContent="Last word removed.";
- render();
-}
-
-function clearSentence(){
- if(checked||gameOver)return;
- bank.push(...answer);
- answer=[];
- $("feedback").className="feedback";
- $("feedback").textContent="Sentence cleared. Try again!";
- render();
-}
-
-function checkSentence(){
- if(gameOver||checked)return;
-
- if(answer.length!==correctWords.length){
-  $("feedback").className="feedback bad";
-  $("feedback").textContent="Please use all the words before submitting!";
-  return;
- }
-
- attempts++;
- checked=true;
-
- const allCorrect=answer.every((item,i)=>positionCorrect(i));
- if(allCorrect)score++;
-
- render();
- $("feedback").className=allCorrect?"feedback good":"feedback bad";
-
- $("feedback").textContent=allCorrect
-  ?"🎉 Excellent! Every word is in the correct position!"
-  :"Keep practising! Green checks show correctly positioned words. The correct sentence is revealed in Hard Mode.";
-
- updateStats();
-}
-
-function updateStats(){
- $("score").textContent=score;
- $("attempts").textContent=attempts;
- $("accuracy").textContent=attempts?Math.round(score/attempts*100)+"%":"0%";
-}
-
-function setMode(newMode){
- if(gameOver)return;
- mode=newMode;
-
- document.querySelectorAll(".mode").forEach(btn=>{
-  btn.classList.toggle("active",btn.dataset.mode===mode);
- });
-
- getNewQuestion();
-}
-
-function updateTimer(){
- const minutes=Math.floor(timeLeft/60);
- const seconds=timeLeft%60;
- $("timer").textContent="⏱ "+String(minutes).padStart(2,"0")+":"+String(seconds).padStart(2,"0");
- $("timer").style.color=timeLeft<=60?"#c43f48":"var(--dark)";
-}
-
-function startTimer(){
- clearInterval(timerHandle);
- timerHandle=setInterval(()=>{
-  if(gameOver)return;
-  timeLeft--;
-  updateTimer();
-  if(timeLeft<=0)endGame();
- },1000);
-}
-
-function endGame(){
- gameOver=true;
- clearInterval(timerHandle);
- render();
-
- $("finalMessage").textContent="You got "+score+" out of "+attempts+
- " checked sentences correct ("+
- (attempts?Math.round(score/attempts*100):0)+
- "%). Great effort!";
-
- $("timeOverlay").classList.add("show");
-}
-
-function startGame(){
- clearInterval(timerHandle);
- mode="easy";
- questionNumber=0;
- score=0;
- attempts=0;
- timeLeft=300;
- gameOver=false;
- usedQuestions={easy:[],medium:[],hard:[]};
-
- document.querySelectorAll(".mode").forEach(btn=>{
-  btn.classList.toggle("active",btn.dataset.mode==="easy");
- });
-
- $("timeOverlay").classList.remove("show");
- updateStats();
- updateTimer();
- getNewQuestion();
- startTimer();
-}
-
-document.querySelectorAll(".mode").forEach(btn=>{
- btn.addEventListener("click",()=>setMode(btn.dataset.mode));
-});
-
-$("submitBtn").addEventListener("click",checkSentence);
-$("clearBtn").addEventListener("click",clearSentence);
-$("deleteBtn").addEventListener("click",deleteLastWord);
-$("newBtn").addEventListener("click",getNewQuestion);
-$("playAgainBtn").addEventListener("click",startGame);
-
-startGame();
-</script>
-</body>
-</html>
+<div cla
+```
